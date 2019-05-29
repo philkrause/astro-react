@@ -5,7 +5,8 @@ class NewsFeed extends Component {
     mission: '',
     details: '',
     eta: '',
-    launch_name: ''
+    launch_name: '',
+    slide: 0
   }
   get_news_api = () => {
     console.log('fetching api 2')
@@ -15,20 +16,25 @@ class NewsFeed extends Component {
         return response.json()
       })
       .then(data => {
-        console.log(this.slide)
+        console.log(this.state.slide)
         this.setState({
-          mission: data[this.slide].mission_name,
-          details: data[this.slide].details,
-          eta: data[this.slide].launch_date_local,
-          launch_name: data[this.slide].launch_site.site_name_long
+          mission: data[this.state.slide].mission_name,
+          details: data[this.state.slide].details,
+          eta: data[this.state.slide].launch_date_local,
+          launch_name: data[this.state.slide].launch_site.site_name_long
         })
       })
   }
+  increaseSlide = () => {
+    this.state.slide += 1
+    console.log('buttonclicked')
+    this.get_news_api()
+  }
+
   componentDidMount() {
     this.get_news_api()
   }
   render() {
-    const increaseSlide = () => (this.slide += 1)
     return (
       <>
         <h2 className="banner">Upcoming Space Launches</h2>
@@ -41,13 +47,13 @@ class NewsFeed extends Component {
           <section className="news-feed">
             <h2>
               <i className="fas fa-space-shuttle" />
-              &nbsp;<span>&nbsp;</span>
+              &nbsp;<span>{this.state.mission}</span>
             </h2>
             <p>
               <i className="fas fa-info-circle" />
               <span id="details" />
             </p>
-
+            {this.state.details}
             <p>
               <i className="fas fa-clock" />
               <span id="eta" />
@@ -56,11 +62,11 @@ class NewsFeed extends Component {
             <p>
               <i className="fas fa-map-marked" />
               <span id="launch_name" />
-              &nbsp;
+              {this.setState.launch_name}
             </p>
           </section>
           <div className="right-button-container">
-            <button onClick={() => this.increaseSlide} className="right-button">
+            <button onClick={this.increaseSlide} className="right-button">
               <i className="fas fa-angle-right" />
             </button>
           </div>
